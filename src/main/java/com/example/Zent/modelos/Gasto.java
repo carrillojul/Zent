@@ -27,7 +27,9 @@ public class Gasto {
     @JoinColumn(name = "categoria_id")
     private Categoria categoria;
 
-    private String establecimiento;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "comercio_id")
+    private Comercio comercio;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "medio_pago_id")
@@ -42,13 +44,13 @@ public class Gasto {
     public Gasto() {
     }
 
-    public Gasto(Integer id, String descripcion, LocalDate fechaRegistro, Double valor, String imagen, String establecimiento, String notas) {
+    public Gasto(Integer id, String descripcion, LocalDate fechaRegistro, Double valor, String imagen, Comercio comercio, String notas) {
         this.id = id;
         this.descripcion = descripcion;
         this.fechaRegistro = fechaRegistro;
         this.valor = valor;
         this.imagen = imagen;
-        this.establecimiento = establecimiento;
+        this.comercio = comercio;
         this.notas = notas;
     }
 
@@ -101,11 +103,15 @@ public class Gasto {
     }
 
     public String getEstablecimiento() {
-        return establecimiento;
+        return comercio != null ? comercio.getNombre() : null;
     }
 
-    public void setEstablecimiento(String establecimiento) {
-        this.establecimiento = establecimiento;
+    public Comercio getComercio() {
+        return comercio;
+    }
+
+    public void setComercio(Comercio comercio) {
+        this.comercio = comercio;
     }
 
     public MedioDePago getMedioPago() {

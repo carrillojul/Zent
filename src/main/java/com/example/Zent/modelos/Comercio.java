@@ -1,12 +1,15 @@
 package com.example.Zent.modelos;
 
 import java.time.LocalDate;
+import java.util.List;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.FetchType;
 
 @Entity
 @Table(name = "comercios")
@@ -27,6 +30,9 @@ public class Comercio {
     private LocalDate fechaRegistro;
     private Boolean estado;
     private String regimenTributario;
+
+    @OneToMany(mappedBy = "comercio", fetch = FetchType.LAZY)
+    private List<Gasto> gastos;
 
 
     public Comercio() {
@@ -146,6 +152,14 @@ public class Comercio {
 
     public void setRegimenTributario(String regimenTributario) {
         this.regimenTributario = regimenTributario;
+    }
+
+    public List<Gasto> getGastos() {
+        return gastos;
+    }
+
+    public void setGastos(List<Gasto> gastos) {
+        this.gastos = gastos;
     }
 
     

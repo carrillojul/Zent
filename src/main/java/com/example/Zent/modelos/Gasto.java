@@ -2,6 +2,7 @@ package com.example.Zent.modelos;
 
 import java.time.LocalDate;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
@@ -18,39 +19,50 @@ public class Gasto {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
+    @Column(name = "descripcion", nullable = false, unique = false, length = 255)
     private String descripcion;
+    @Column(name = "fecha_registro", nullable = false, unique = false)
     private LocalDate fechaRegistro;
+    @Column(name = "valor", nullable = false, unique = false, precision = 10, scale = 2)
     private Double valor;
+    @Column(name = "imagen", nullable = true, unique = false, length = 255)
     private String imagen;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "categoria_id")
+    @JoinColumn(name = "fk_categoria", referencedColumnName = "id")
     private Categoria categoria;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "comercio_id")
-    private Comercio comercio;
+    @Column(name = "establecimiento", nullable = true, unique = false, length = 255)
+    private String establecimiento;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "medio_pago_id")
+    @JoinColumn(name = "fk_medio_pago", referencedColumnName = "id")
     private MedioDePago medioPago;
 
+    @Column(name = "notas", nullable = true, unique = false, length = 255)
     private String notas;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "usuario_id")
+    @JoinColumn(name = "fk_usuario", referencedColumnName = "id")
     private Usuario usuario;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "fk_comercio", referencedColumnName = "id")
+    private Comercio comercio;
+
+    //creando una relacion con el modelo de usuario
+    //yo como gasto me relaciono con un usuario, es decir, un gasto pertenece a un usuario
 
     public Gasto() {
     }
 
-    public Gasto(Integer id, String descripcion, LocalDate fechaRegistro, Double valor, String imagen, Comercio comercio, String notas) {
+    public Gasto(Integer id, String descripcion, LocalDate fechaRegistro, Double valor, String imagen, String establecimiento, String notas) {
         this.id = id;
         this.descripcion = descripcion;
         this.fechaRegistro = fechaRegistro;
         this.valor = valor;
         this.imagen = imagen;
-        this.comercio = comercio;
+        this.establecimiento = establecimiento;
         this.notas = notas;
     }
 
@@ -103,15 +115,11 @@ public class Gasto {
     }
 
     public String getEstablecimiento() {
-        return comercio != null ? comercio.getNombre() : null;
+        return establecimiento;
     }
 
-    public Comercio getComercio() {
-        return comercio;
-    }
-
-    public void setComercio(Comercio comercio) {
-        this.comercio = comercio;
+    public void setEstablecimiento(String establecimiento) {
+        this.establecimiento = establecimiento;
     }
 
     public MedioDePago getMedioPago() {
